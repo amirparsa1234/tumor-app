@@ -1,0 +1,31 @@
+# TensorFlow / Keras models
+*.h5
+*.pb
+*.ckpt
+# keep current models
+!model/best_model.keras
+!model/best_model.tflite
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environments
+.env
+.venv/
+env/
+venv/
+
+# Logs
+*.log
+logs/
+nohup.out
+
+# IDEs
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
