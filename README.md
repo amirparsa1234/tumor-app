@@ -9,6 +9,7 @@ Requirement: Docker
 
 # Clone repository
 git clone https:/github.com/amirparsa1234/tumor-app.git
+
 cd tumor-app
 
 # Build image
@@ -55,20 +56,6 @@ curl -I http://127.0.0.1:8000
 # expect "200 OK"
 
 curl -F "file=@/path/to/mri.jpg" http://127.0.0.1:8000/predict
-
-📁 Project Structure
-tumor-app/
-├─ app/
-│  ├─ __init__.py
-│  ├─ infer.py           # model loading & prediction logic
-│  ├─ main.py            # FastAPI endpoints
-│  └─ static/
-│     └─ index.html      # simple upload UI
-├─ model/
-│  └─ best_model.tflite  # TensorFlow Lite model used by the app
-├─ Dockerfile
-├─ .gitignore
-└─ README.md
 
 
 ⚠️ The .keras model file is not required.
