@@ -1,123 +1,93 @@
-🧠 Brain Tumor Classifier (FastAPI + TensorFlow Lite)
+# 🧠 Brain Tumor Classifier (FastAPI + TensorFlow Lite)
 
-A lightweight web service for brain tumor classification using a TensorFlow Lite model and FastAPI.
-It provides a simple web interface (index.html) for image upload and prediction.
+A lightweight web app for **brain tumor classification** built with **FastAPI** and **TensorFlow Lite**.  
+Runs entirely on CPU and provides a simple web UI for image upload and prediction.
 
-🚀 Quick Start (Docker)
+---
 
-Requirement: Docker
+## 🚀 Run with Docker (Recommended)
 
-# Clone repository
-git clone https:/github.com/amirparsa1234/tumor-app.git
+### 1️⃣ Pull the image
+```bash
+docker pull amirparsab/tumor-app:latest
+```
 
-cd tumor-app
+### 2️⃣ Run the container
+```bash
+docker run -d --name tumor-app \
+  -p 8000:8000 \
+  --restart unless-stopped \
+  amirparsab/tumor-app:latest
+```
 
-# Build image
-docker build -t tumor-app .
+Then open your browser at:  
+👉 **http://SERVER_IP:8000**
 
-# Run container
-docker run -d --name tumor-app -p 8000:8000 --restart unless-stopped tumor-app
-
-
-Then open: http://SERVER_IP:8000
-
-To stop/start the container:
-
+To stop or start later:
+```bash
 docker stop tumor-app
 docker start tumor-app
+```
 
+✅ The container auto-starts after reboot (because of `--restart unless-stopped`).
 
-The flag --restart unless-stopped ensures the container auto-starts after a reboot.
+---
 
-🧩 Local Development (without Docker)
+## 🧩 API Quick Test
 
-Requirements: Python 3.10+ and basic system libraries (libjpeg, libpng, …)
-Example (Ubuntu):
-
-sudo apt update
-sudo apt install -y python3-venv libglib2.0-0 libjpeg-turbo-progs libpng16-16 zlib1g
-
-git clone https:/github.com/amirparsa1234/tumor-app.git
-cd tumor-app
-
-python3 -m venv venv
-source venv/bin/activate
-
-pip install -r app/requirements.txt
-
-# Run locally
-uvicorn app.main:app --host 0.0.0.0 --port 8000
-
-
-Visit → http://127.0.0.1:8000
-
-🧠 Quick API Test
-curl -I http://127.0.0.1:8000
-# expect "200 OK"
-
+```bash
 curl -F "file=@/path/to/mri.jpg" http://127.0.0.1:8000/predict
+```
 
+You’ll get a JSON response like:
+```json
+{
+  "top_class": "Glioma",
+  "has_tumor": true,
+  "probabilities": {
+    "Glioma": 0.92,
+    "Meningioma": 0.04,
+    "Notumor": 0.01,
+    "Pituitary": 0.03
+  }
+}
+```
 
-⚠️ The .keras model file is not required.
-The app only uses the best_model.tflite file for inference (optimized for CPU).
+---
 
-🔁 Updating on Server
+## 🧠 Model
 
-When deploying new changes:
+The app uses:
+- `model/best_model.tflite` → optimized for CPU  
+- *(The `.keras` file is no longer needed)*
 
-cd ~/tumor-app
-git pull origin main
-docker build -t tumor-app .
+---
+
+## 🔄 Updating to Latest Version
+
+```bash
+docker pull amirparsab/tumor-app:latest
 docker rm -f tumor-app
-docker run -d --name tumor-app -p 8000:8000 --restart unless-stopped tumor-app
+docker run -d --name tumor-app -p 8000:8000 --restart unless-stopped amirparsab/tumor-app:latest
+```
 
-⚙️ Troubleshooting
+---
 
-❌ “python-multipart not installed”
-Required for file uploads — it’s already in requirements.txt.
-If you run locally and see this error:
+## 🧱 Tech Stack
+- **Backend:** FastAPI (Python 3.11)
+- **Model:** TensorFlow Lite (CPU inference)
+- **Frontend:** Simple HTML upload form
+- **Containerization:** Docker
 
-pip install python-multipart
+---
 
+## 🔒 Clean Repository
+- Only lightweight model file (`best_model.tflite`) is included  
+- No large datasets or virtual environments committed  
 
-❌ Port 8000 already in use
-Change port when starting:
+---
 
-uvicorn app.main:app --port 8080
-# or
-docker run -p 8080:8000 ...
-
-
-❌ App not loading in browser
-Rebuild Docker image after adding new static files:
-
-docker build -t tumor-app .
-
-
-❌ TensorFlow or CPU errors
-The container uses CPU-based TensorFlow Lite.
-GPU acceleration requires a different base image (not included).
-
-🔒 Clean Repo Guidelines
-
-Large files (datasets, .venv, temp files) are excluded in .gitignore.
-
-Only the lightweight best_model.tflite should remain inside model/.
-
-🧠 Notes
-
-Frontend: basic HTML form for uploading MRI images.
-
-Backend: FastAPI handles /predict endpoint.
-
-Model: TensorFlow Lite inference (CPU-optimized).
-
-Auto-restart: handled by Docker’s --restart unless-stopped.
-
-🔄 Future Improvements
-
-Add Grad-CAM heatmap localization (currently disabled)
-
-Support for GPU / TensorFlow GPU
-
-Add Docker Compose file for easier multi-service deployment
+## 💡 Future Improvements
+- Grad-CAM tumor localization  
+- GPU-enabled version  
+- Multi-service Docker Compose setup
